@@ -15,6 +15,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/joi": "^17.2.3",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/morgan": "^1.9.9",
@@ -35,6 +36,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
     "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "joi": "^17.13.3",

@@ -8,10 +8,12 @@ import appConfig from './config/app.config';
 import apiRouter from './routes/index.router';
 import globalErrorHandler from './middlewares/globalErrorHandler.middleware';
 import morgan from 'morgan';
+import cors from 'cors';
 
 const app: Application = express();
 app.use(morgan('tiny'));
 app.use(express.json());
+app.use(cors());
 
 app.use(appConfig.API_PREFIX, apiRouter);
 
