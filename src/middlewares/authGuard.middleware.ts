@@ -17,9 +17,8 @@ const authGuard = asyncErrorHandler(async (req: Request, res: Response, next: Ne
   const user = await prisma.user.findUnique({
     where: { id: payloadData.id },
   });
-  console.log(req.user);
   if (!user) throw new CustomError('User does not exists', 401);
-  // req.user = user;
+  req.user = user;
   next();
 });
 
