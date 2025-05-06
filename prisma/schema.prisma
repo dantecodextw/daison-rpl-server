@@ -8,18 +8,31 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  first     String
-  last      String
-  email     String   @unique
-  password  String
-  role      Roles
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int             @id @default(autoincrement())
+  first         String
+  last          String
+  email         String          @unique
+  password      String
+  role          Roles
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  DoctorPatient DoctorPatient[] @relation("DoctorPatient")
+  PatientDoctor DoctorPatient[] @relation("PatientDoctor")
 }
 
 model PatientData {
   id Int @id @default(autoincrement())
+}
+
+model DoctorPatient {
+  id        Int      @id @default(autoincrement())
+  doctorId  Int
+  patientId Int
+  patient   User     @relation("PatientDoctor", fields: [patientId], references: [id])
+  doctor    User     @relation("DoctorPatient", fields: [doctorId], references: [id])
+  addedTime DateTime @default(now())
+
+  @@unique([doctorId, patientId])
 }
 
 enum Roles {

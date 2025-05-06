@@ -31,6 +31,13 @@ async function main() {
     skipDuplicates: true,
   });
 
+  await prisma.doctorPatient.create({
+    data: {
+      doctorId: 1,
+      patientId: 2,
+    },
+  });
+
   console.log('Seeded 1 doctor and 2 patients');
 }
 
