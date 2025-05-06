@@ -40,7 +40,7 @@ async function main() {
 
   await prisma.patientVitals.create({
     data: {
-      heartRate: '72',
+      heartRate: '72bpm',
       patientId: 2,
     },
   });
