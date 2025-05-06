@@ -9,6 +9,6 @@ const apiRouter: Router = express.Router();
 apiRouter.use('/auth', authRouter);
 
 apiRouter.use(authGuard);
-apiRouter.route('/patient/list').get(authorization('doctor'), patientController.patientList);
+apiRouter.route('/doctor/patient-list').get(authorization('doctor'), patientController.patientList);
 
 export default apiRouter;
