@@ -18,7 +18,7 @@ const authGuard = asyncErrorHandler(async (req: Request, res: Response, next: Ne
     where: { id: payloadData.id },
   });
   if (!user) throw new CustomError('User does not exists', 401);
-  (req as any).user = user;
+  req.user = user;
   next();
 });
 
