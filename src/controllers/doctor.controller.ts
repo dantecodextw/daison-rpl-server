@@ -22,7 +22,7 @@ const dashboardPatientList = asyncErrorHandler(async (req, res) => {
 
 const addPatientData = asyncErrorHandler(async (req, res) => {
   const validatedData = doctorValidation.addPatientData.validate(req.body) as Vitals;
-  const data = doctorService.addPatientData(validatedData, req.params!.patientId);
+  const data = await doctorService.addPatientData(validatedData, req.params!.patientId);
   res.status(200).json(apiResponse('Patient vitals has been updated', data));
 });
 

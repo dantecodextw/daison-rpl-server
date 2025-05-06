@@ -47,8 +47,14 @@ const dashboardPatientList = async (doctorId: number) => {
 };
 
 const addPatientData = async (validatedData: Vitals, patientId: string) => {
-  const updatedVitals = await prisma.patientVitals.create({
-    data: {
+  const updatedVitals = await prisma.patientVitals.upsert({
+    where: {
+      patientId: Number(patientId), // must be unique or part of a unique constraint
+    },
+    update: {
+      ...validatedData,
+    },
+    create: {
       ...validatedData,
       patientId: Number(patientId),
     },
