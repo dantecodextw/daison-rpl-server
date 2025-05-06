@@ -17,4 +17,9 @@ apiRouter
   .route('/doctor/dashboard/patient-list')
   .get(authorization('doctor'), doctorController.dashboardPatientList);
 
+apiRouter
+  .route('/doctor/patient-data/:patientId')
+  .patch(doctorController.addPatientData)
+  .get(doctorController.fetchPatientData);
+
 export default apiRouter;

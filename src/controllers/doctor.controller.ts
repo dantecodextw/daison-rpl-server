@@ -1,6 +1,8 @@
 import asyncErrorHandler from '../middlewares/asyncErrorHandler.middleware';
 import doctorService from '../services/doctor.service';
+import { Vitals } from '../types/doctor.type';
 import apiResponse from '../utils/apiResponse.utils';
+import doctorValidation from '../validations/doctor.validation';
 
 const patientList = asyncErrorHandler(async (req, res) => {
   const list = await doctorService.patientList(req.user!?.id);
@@ -18,8 +20,20 @@ const dashboardPatientList = asyncErrorHandler(async (req, res) => {
   res.status(200).json(apiResponse('Dashboard patient list has been fetched', list));
 });
 
+const addPatientData = asyncErrorHandler(async (req, res) => {
+  const validatedData = doctorValidation.addPatientData.validate(req.body) as Vitals;
+  const data = doctorService.addPatientData(validatedData, req.params!.patientId);
+  res.status(200).json(apiResponse('Patient vitals has been updated', data));
+});
+
+const fetchPatientData = asyncErrorHandler(async (req, res) => {
+  const patientData = await doctorService.fetchPatientData(req.params!.patientId);
+  res.status(200).json(apiResponse('Patient vitals has been fetched', patientData));
+});
 export default {
   patientList,
   addPatient,
   dashboardPatientList,
+  addPatientData,
+  fetchPatientData,
 };

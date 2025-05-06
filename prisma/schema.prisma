@@ -18,10 +18,10 @@ model User {
   updatedAt     DateTime        @updatedAt
   DoctorPatient DoctorPatient[] @relation("DoctorPatient")
   PatientDoctor DoctorPatient[] @relation("PatientDoctor")
-  PatientData   PatientData?
+  PatientData   PatientVitals?
 }
 
-model PatientData {
+model PatientVitals {
   id            Int      @id @default(autoincrement())
   bloodPressure String?
   heartRate     String?

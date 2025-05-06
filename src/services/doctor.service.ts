@@ -1,4 +1,5 @@
 import { prisma } from '../generated/prismaClient';
+import { Vitals } from '../types/doctor.type';
 import CustomError from '../utils/customError.utils';
 
 const patientList = async (doctorId: number) => {
@@ -44,8 +45,28 @@ const dashboardPatientList = async (doctorId: number) => {
 
   return formattedData;
 };
+
+const addPatientData = async (validatedData: Vitals, patientId: string) => {
+  const updatedVitals = await prisma.patientVitals.create({
+    data: {
+      ...validatedData,
+      patientId: Number(patientId),
+    },
+  });
+
+  return updatedVitals;
+};
+
+const fetchPatientData = async (patientId: string) => {
+  return await prisma.patientVitals.findUnique({
+    where: { patientId: Number(patientId) },
+  });
+};
+
 export default {
   patientList,
   addPatient,
   dashboardPatientList,
+  addPatientData,
+  fetchPatientData,
 };
