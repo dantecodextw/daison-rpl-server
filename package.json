@@ -5,6 +5,7 @@
   "type": "commonjs",
   "scripts": {
     "dev": "nodemon",
+    "seed": "ts-node prisma/seed.ts",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "lint:check": "eslint .",

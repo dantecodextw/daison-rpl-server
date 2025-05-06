@@ -5,6 +5,7 @@ const signup = new validationHelper({
   name: Joi.string().min(3).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
+  role: Joi.valid('doctor', 'patient'),
 });
 
 const login = new validationHelper({
