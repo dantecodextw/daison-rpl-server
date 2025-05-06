@@ -38,7 +38,14 @@ async function main() {
     },
   });
 
-  console.log('Seeded 1 doctor and 2 patients');
+  await prisma.patientVitals.create({
+    data: {
+      heartRate: '72',
+      patientId: 2,
+    },
+  });
+
+  console.log('Seeder has been completed');
 }
 
 main()
