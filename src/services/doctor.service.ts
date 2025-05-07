@@ -1,5 +1,7 @@
 import { prisma } from '../generated/prismaClient';
-import { Vitals } from '../types/doctor.type';
+import { DateTime } from 'luxon';
+
+import { AddPatientVitalsInput, VitalType } from '../types/doctor.type';
 import CustomError from '../utils/customError.utils';
 
 const patientList = async (doctorId: number) => {
@@ -46,26 +48,44 @@ const dashboardPatientList = async (doctorId: number) => {
   return formattedData;
 };
 
-const addPatientData = async (validatedData: Vitals, patientId: string) => {
-  const updatedVitals = await prisma.patientVitals.upsert({
+const addPatientData = async (validatedData: AddPatientVitalsInput, patientId: string) => {
+  const patientExist = await prisma.user.findUnique({
     where: {
-      patientId: Number(patientId), // must be unique or part of a unique constraint
+      id: Number(patientId),
+      role: 'patient',
     },
-    update: {
-      ...validatedData,
-    },
-    create: {
-      ...validatedData,
-      patientId: Number(patientId),
+    select: { id: true },
+  });
+
+  if (!patientExist) throw new CustomError('Invalid patient id provided', 400);
+
+  const { readingDate, readingTime, ...rest } = validatedData;
+
+  const localReadingTime = DateTime.fromFormat(
+    `${readingDate} ${readingTime}`,
+    'yyyy-MM-dd HH:mm',
+    { zone: 'local' },
+  );
+
+  const readingTimeUTC = localReadingTime.toJSDate();
+
+  const addedVitals = await prisma.patientVitals.create({
+    data: {
+      ...rest,
+      readingTime: readingTimeUTC,
+      userId: patientExist.id,
     },
   });
 
-  return updatedVitals;
+  return addedVitals;
 };
 
-const fetchPatientData = async (patientId: string) => {
-  return await prisma.patientVitals.findUnique({
-    where: { patientId: Number(patientId) },
+const fetchPatientData = async (type: VitalType, patientId: string) => {
+  return await prisma.patientVitals.findMany({
+    where: { userId: Number(patientId), type },
+    orderBy: {
+      readingTime: 'desc',
+    },
   });
 };
 

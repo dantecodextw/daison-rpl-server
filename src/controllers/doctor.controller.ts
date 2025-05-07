@@ -1,6 +1,6 @@
 import asyncErrorHandler from '../middlewares/asyncErrorHandler.middleware';
 import doctorService from '../services/doctor.service';
-import { Vitals } from '../types/doctor.type';
+import { AddPatientVitalsInput, VitalType } from '../types/doctor.type';
 import apiResponse from '../utils/apiResponse.utils';
 import doctorValidation from '../validations/doctor.validation';
 
@@ -21,13 +21,16 @@ const dashboardPatientList = asyncErrorHandler(async (req, res) => {
 });
 
 const addPatientData = asyncErrorHandler(async (req, res) => {
-  const validatedData = doctorValidation.addPatientData.validate(req.body) as Vitals;
+  const validatedData = doctorValidation.addPatientData.validate(req.body) as AddPatientVitalsInput;
   const data = await doctorService.addPatientData(validatedData, req.params!.patientId);
   res.status(200).json(apiResponse('Patient vitals has been updated', data));
 });
 
 const fetchPatientData = asyncErrorHandler(async (req, res) => {
-  const patientData = await doctorService.fetchPatientData(req.params!.patientId);
+  const patientData = await doctorService.fetchPatientData(
+    req.params.type as VitalType,
+    req.params.patientId,
+  );
   res.status(200).json(apiResponse('Patient vitals has been fetched', patientData));
 });
 export default {

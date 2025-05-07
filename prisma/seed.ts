@@ -38,12 +38,12 @@ async function main() {
     },
   });
 
-  await prisma.patientVitals.create({
-    data: {
-      heartRate: '72bpm',
-      patientId: 2,
-    },
-  });
+  // await prisma.patientVitals.create({
+  //   data: {
+  //     heartRate: '72bpm',
+  //     patientId: 2,
+  //   },
+  // });
 
   console.log('Seeder has been completed');
 }

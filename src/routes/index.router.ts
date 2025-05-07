@@ -19,7 +19,9 @@ apiRouter
 
 apiRouter
   .route('/doctor/patient-data/:patientId')
-  .patch(authorization('doctor'), doctorController.addPatientData)
+  .patch(authorization('doctor'), doctorController.addPatientData);
+apiRouter
+  .route('/doctor/patient-data/:type/:patientId')
   .get(authorization('doctor'), doctorController.fetchPatientData);
 
 export default apiRouter;
