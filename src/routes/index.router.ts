@@ -19,9 +19,10 @@ apiRouter
 
 apiRouter
   .route('/doctor/patient-data/:patientId')
-  .post(authorization('doctor'), doctorController.addPatientData);
+  .post(authorization('doctor'), doctorController.addPatientData)
+  .get(authorization('doctor'), doctorController.fetchPatientData);
 apiRouter
   .route('/doctor/patient-data/:type/:patientId')
-  .get(authorization('doctor'), doctorController.fetchPatientData);
+  .get(authorization('doctor'), doctorController.fetchPatientTypeData);
 
 export default apiRouter;

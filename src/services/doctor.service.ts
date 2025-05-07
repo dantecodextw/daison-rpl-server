@@ -80,7 +80,7 @@ const addPatientData = async (validatedData: AddPatientVitalsInput, patientId: s
   return addedVitals;
 };
 
-const fetchPatientData = async (type: VitalType, patientId: string) => {
+const fetchPatientTypeData = async (type: VitalType, patientId: string) => {
   return await prisma.patientVitals.findMany({
     where: { userId: Number(patientId), type },
     orderBy: {
@@ -89,10 +89,20 @@ const fetchPatientData = async (type: VitalType, patientId: string) => {
   });
 };
 
+const fetchPatientData = async (patientId: string) => {
+  return await prisma.$queryRaw`
+  SELECT DISTINCT ON (type) *
+  FROM "PatientVitals"
+  WHERE "userId" = ${Number(patientId)}
+  ORDER BY type, "readingTime" DESC
+`;
+};
+
 export default {
   patientList,
   addPatient,
   dashboardPatientList,
   addPatientData,
+  fetchPatientTypeData,
   fetchPatientData,
 };

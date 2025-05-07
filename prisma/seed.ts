@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Vitals } from '@prisma/client';
+import { DateTime } from 'luxon';
 const prisma = new PrismaClient();
 import bcrypt from 'bcrypt';
 
@@ -38,12 +39,34 @@ async function main() {
     },
   });
 
-  // await prisma.patientVitals.create({
-  //   data: {
-  //     heartRate: '72bpm',
-  //     patientId: 2,
-  //   },
-  // });
+  await prisma.patientVitals.createMany({
+    data: [
+      {
+        type: Vitals.bloodPressure,
+        value: '120/80',
+        readingTime: DateTime.now().setZone('utc').minus({ hours: 2 }).toJSDate(),
+        meals: 'Lunch',
+        notes: 'Normal blood pressure.',
+        userId: 2,
+      },
+      {
+        type: Vitals.heartRate,
+        value: '72 bpm',
+        readingTime: DateTime.now().setZone('utc').minus({ minutes: 30 }).toJSDate(),
+        meals: 'Dinner',
+        notes: 'Normal heart rate.',
+        userId: 2,
+      },
+      {
+        type: Vitals.oxygenLevel,
+        value: '98%',
+        readingTime: DateTime.now().setZone('utc').minus({ day: 1 }).toJSDate(),
+        meals: 'Breakfast',
+        notes: 'Normal oxygen level.',
+        userId: 2,
+      },
+    ],
+  });
 
   console.log('Seeder has been completed');
 }

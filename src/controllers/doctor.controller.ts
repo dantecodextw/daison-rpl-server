@@ -26,11 +26,18 @@ const addPatientData = asyncErrorHandler(async (req, res) => {
   res.status(200).json(apiResponse('Patient vitals has been updated', data));
 });
 
-const fetchPatientData = asyncErrorHandler(async (req, res) => {
-  const patientData = await doctorService.fetchPatientData(
+const fetchPatientTypeData = asyncErrorHandler(async (req, res) => {
+  const patientData = await doctorService.fetchPatientTypeData(
     req.params.type as VitalType,
     req.params.patientId,
   );
+  res
+    .status(200)
+    .json(apiResponse(`Patient ${req.params.type} vitals has been fetched`, patientData));
+});
+
+const fetchPatientData = asyncErrorHandler(async (req, res) => {
+  const patientData = await doctorService.fetchPatientData(req.params.patientId);
   res.status(200).json(apiResponse('Patient vitals has been fetched', patientData));
 });
 export default {
@@ -38,5 +45,6 @@ export default {
   addPatient,
   dashboardPatientList,
   addPatientData,
+  fetchPatientTypeData,
   fetchPatientData,
 };
