@@ -1,0 +1,4 @@
+npm install
+npx prisma migrate deploy
+// ALternatively you can do "npx prisma migrate reset" to reset the database and apply migration
+npm run start // To build and start the local server
