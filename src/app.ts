@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import './config/validateEnv';
+import './utils/redis.utils'; // Checking redis connection
 
 import express, { Application } from 'express';
 import httpErrors from 'http-errors';

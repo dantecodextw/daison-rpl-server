@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 
 import { AddPatientVitalsInput, VitalType } from '../types/doctor.type';
 import CustomError from '../utils/customError.utils';
+import redis from '../utils/redis.utils';
 
 const patientList = async (doctorId: number) => {
   return await prisma.user.findMany({
@@ -30,20 +31,24 @@ const addPatient = async (doctorID: number, patientID: string) => {
       patientId: Number(patientID),
     },
   });
+  await redis.del(`monitoringList:${doctorID}`);
 };
+
 const dashboardPatientList = async (doctorId: number) => {
+  const patientList = await redis.get(`monitoringList:${doctorId}`);
+  const parsed = patientList ? JSON.parse(patientList) : null;
+  if (Array.isArray(parsed) && parsed.length > 0) {
+    return parsed;
+  }
+
   const userList = await prisma.doctorPatient.findMany({
-    where: {
-      doctorId,
-    },
-    include: {
-      patient: true,
-    },
+    where: { doctorId },
+    include: { patient: true },
   });
 
-  const formattedData = userList.map((data) => {
-    return data.patient;
-  });
+  const formattedData = userList.map((data) => data.patient);
+
+  await redis.set(`monitoringList:${doctorId}`, JSON.stringify(formattedData));
 
   return formattedData;
 };
